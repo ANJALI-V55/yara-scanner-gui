@@ -1,0 +1,28 @@
+@startuml use case
+title 7.2 Use Case Diagram - Malware Scanner Using YARA
+
+actor "User" as User
+
+rectangle "Malware Scanner\nUsing YARA" {
+  usecase "Select File/Folder\nfor Scan" as UC_Select
+  usecase "Start Manual Scan" as UC_Scan
+  usecase "View Scan Results" as UC_View
+  usecase "View/Export Reports" as UC_Report
+  usecase "Configure\nScheduled Scan" as UC_Schedule
+  usecase "Manage YARA Rules\n(Add/Update)" as UC_Rules
+  usecase "Quarantine/Delete\nMalicious Files" as UC_Quarantine
+}
+
+User --> UC_Select
+User --> UC_Scan
+User --> UC_View
+User --> UC_Report
+User --> UC_Schedule
+User --> UC_Rules
+User --> UC_Quarantine
+
+UC_Scan .> UC_Select : «include»
+UC_Scan .> UC_Rules : «include»
+UC_Report .> UC_View : «include»
+
+@enduml

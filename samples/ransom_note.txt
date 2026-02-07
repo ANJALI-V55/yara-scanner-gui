@@ -1,0 +1,4 @@
+Your files have been encrypted.
+Send 1 BTC to 123xyzwallet
+decrypt_key=locked
+contact: badactor@tor.com

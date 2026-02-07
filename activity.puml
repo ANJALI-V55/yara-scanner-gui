@@ -1,0 +1,31 @@
+@startuml activity
+title 7.5 Activity Diagram - Scan Process
+
+start
+
+:Launch Application;
+:Load YARA Rules;
+
+:User selects\nfile/folder;
+if (Is path valid?) then (Yes)
+  :Get list of files;
+  repeat
+    :Read next file;
+    :Match file\nwith YARA rules;
+    if (Match found?) then (Yes)
+      :Mark file as\nMalicious/Suspicious;
+      :Log result &\nsend alert;
+    else (No)
+      :Mark file as Clean;
+      :Log clean status;
+    endif
+  repeat while (More files?)
+  :Generate scan report;
+  :Display results to user;
+else (No)
+  :Show error message\n"Invalid Path";
+endif
+
+stop
+
+@enduml

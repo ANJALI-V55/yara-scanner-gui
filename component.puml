@@ -1,0 +1,28 @@
+@startuml component
+title 7.6 Component Diagram - Malware Scanner Using YARA
+
+component "GUI Module" as GUI
+component "Scan Controller\nModule" as ScanCtrl
+component "YARA Engine\nModule" as YaraMod
+component "Scheduler\nModule" as SchedMod
+component "Report Generator\nModule" as ReportMod
+component "Notification\nModule" as NotifyMod
+component "Quarantine\nModule" as QuarMod
+database "Logs / Reports\nStorage" as LogDB
+folder "File System\n(Scanned Files)" as FS
+folder "YARA Rule Files" as RuleStore
+
+GUI --> ScanCtrl
+GUI --> SchedMod
+GUI --> ReportMod
+
+ScanCtrl --> YaraMod
+ScanCtrl --> FS
+ScanCtrl --> ReportMod
+ScanCtrl --> NotifyMod
+ScanCtrl --> QuarMod
+
+YaraMod --> RuleStore
+ReportMod --> LogDB
+
+@enduml

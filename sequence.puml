@@ -1,0 +1,34 @@
+@startuml sequence
+title 7.4 Sequence Diagram - Manual Scan\nMalware Scanner Using YARA
+
+actor User
+participant GUI
+participant ScanController
+participant FileSystemService as FS
+participant YaraEngine
+participant ReportGenerator as Report
+participant NotificationManager as Notify
+
+User -> GUI : Select file/folder\nClick Scan
+GUI -> ScanController : startScan(path)
+
+ScanController -> FS : listFiles(path)
+FS --> ScanController : fileList
+
+loop for each file
+  ScanController -> YaraEngine : matchFile(file)
+  YaraEngine --> ScanController : matchResult
+
+  alt Malware Detected
+    ScanController -> Report : logResult(file, "Malicious", ruleName)
+    ScanController -> Notify : sendAlert("Malware detected in " + file)
+  else Clean
+    ScanController -> Report : logResult(file, "Clean", "-")
+  end
+end
+
+ScanController -> Report : generateReport()
+Report --> ScanController : reportPath
+ScanController -> GUI : showResults(reportPath)
+
+@enduml

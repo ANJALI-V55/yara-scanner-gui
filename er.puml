@@ -1,0 +1,52 @@
+@startuml er
+title 7.7 ER Diagram - Malware Scanner Using YARA
+
+entity "ScanSession" as ScanSession {
+  * session_id : int <<PK>>
+  --
+  start_time : datetime
+  end_time : datetime
+  path_scanned : string
+  triggered_by : string  'manual / schedule
+}
+
+entity "ScannedFile" as ScannedFile {
+  * file_id : int <<PK>>
+  --
+  session_id : int <<FK>>
+  file_path : string
+  status : string  'Clean/Malicious/Suspicious
+  detected_rule : string
+}
+
+entity "YaraRule" as YaraRule {
+  * rule_id : int <<PK>>
+  --
+  rule_name : string
+  rule_file : string
+  description : string
+}
+
+entity "LogEntry" as LogEntry {
+  * log_id : int <<PK>>
+  --
+  session_id : int <<FK>>
+  message : string
+  log_time : datetime
+}
+
+entity "Schedule" as Schedule {
+  * schedule_id : int <<PK>>
+  --
+  scan_path : string
+  frequency : string
+  next_run : datetime
+  status : string   'active/inactive
+}
+
+ScanSession ||--o{ ScannedFile : "contains"
+ScanSession ||--o{ LogEntry : "generates"
+YaraRule ||--o{ ScannedFile : "used in detection"
+Schedule ||--o{ ScanSession : "triggers"
+
+@enduml

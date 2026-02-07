@@ -1,0 +1,23 @@
+@startuml dfd
+title 7.1 Data Flow Diagram - Level 0\nMalware Scanner Using YARA
+
+skinparam rectangle {
+  BackgroundColor White
+  BorderColor Black
+}
+
+actor "User" as User
+
+rectangle "Malware Scanner\nUsing YARA" as System
+
+rectangle "File System\n(Selected Files/Folders)" as FileSystem
+rectangle "YARA Rule Files" as RuleFiles
+rectangle "Scan Logs /\nReports" as Logs
+
+User --> System : Select file/folder\nStart Scan
+System --> FileSystem : Read file content
+System --> RuleFiles : Load YARA rules
+System --> Logs : Write scan results\n& reports
+System --> User : Show scan results\n& alerts
+
+@enduml

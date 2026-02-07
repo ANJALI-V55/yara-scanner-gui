@@ -1,0 +1,52 @@
+@startuml SA
+title System Architecture - Malware Scanner Using YARA
+
+skinparam componentStyle rectangle
+
+' ==========================
+' LAYERS
+' ==========================
+package "User Interface Layer" {
+  [GUI\n(Graphical User Interface)] as GUI
+}
+
+package "Processing / Logic Layer" {
+  [Scan Controller] as ScanController
+  [YARA Rule Engine] as YaraEngine
+  [Scheduler] as Scheduler
+  [Report Generator] as ReportGen
+  [Notification Manager] as Notifier
+}
+
+package "Storage / Data Layer" {
+  database "Scan Logs / Reports" as LogStore
+  folder "File System\n(Scanned Files)" as FileSystem
+  folder "YARA Rule Files" as RuleFiles
+}
+
+' ==========================
+' RELATIONSHIPS
+' ==========================
+
+' User interaction
+GUI --> ScanController : Select file/folder\nStart Scan
+GUI --> Scheduler : Configure\nScheduled Scan
+GUI --> ReportGen : View / Export\nReports
+
+' Core processing
+ScanController --> YaraEngine : Send files\nfor scanning
+ScanController --> ReportGen : Pass scan\nresults
+ScanController --> Notifier : Send detection\nstatus
+
+' Scheduler flow
+Scheduler --> ScanController : Trigger\nautomatic scan
+
+' YARA engine + storage
+YaraEngine --> RuleFiles : Load\nYARA rules
+ScanController --> FileSystem : Read\nselected files
+
+' Logs & reports
+ReportGen --> LogStore : Save logs\nand reports
+Notifier --> GUI : Show alerts /\nNotifications
+
+@enduml

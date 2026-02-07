@@ -1,0 +1,60 @@
+@startuml class
+title 7.3 Class Diagram - Malware Scanner Using YARA
+
+class GUI {
+  +selectFile()
+  +selectFolder()
+  +startScan()
+  +showResults()
+  +showAlert()
+  +openReport()
+}
+
+class ScanController {
+  +startScan(path: String)
+  +scanFile(filePath: String)
+  +scanFolder(folderPath: String)
+  +handleScheduledScan()
+}
+
+class YaraEngine {
+  +loadRules(rulePath: String)
+  +matchFile(filePath: String): List<MatchResult>
+}
+
+class Scheduler {
+  +setSchedule(time: String, interval: String)
+  +start()
+  +stop()
+}
+
+class ReportGenerator {
+  +logResult(filePath: String, status: String, ruleName: String)
+  +generateReport(): String
+}
+
+class NotificationManager {
+  +sendAlert(message: String)
+}
+
+class QuarantineManager {
+  +moveToQuarantine(filePath: String)
+  +deleteFile(filePath: String)
+}
+
+class FileSystemService {
+  +listFiles(path: String): List<String>
+  +exists(path: String): boolean
+}
+
+GUI --> ScanController
+ScanController --> YaraEngine
+ScanController --> FileSystemService
+ScanController --> ReportGenerator
+ScanController --> NotificationManager
+ScanController --> QuarantineManager
+Scheduler --> ScanController
+ReportGenerator --> "Scan Logs / Reports"
+YaraEngine --> "YARA Rule Files"
+
+@enduml
